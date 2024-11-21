@@ -7,6 +7,7 @@ const context=paintCanvas.getContext("2d")
 // When the color changes, update the context.strokeStyle with the new color
 colorPicker.addEventListener("change", event => {
   // Update the stroke color
+  context.strokeStyle = event.target.value;
 });
 
 
@@ -14,6 +15,7 @@ colorPicker.addEventListener("change", event => {
 
 // Get the range input and label elements
 const lineWidthRange=document.querySelector(".js-line-range")
+const lineWidthLabel=document.querySelector(".js-range-value")
 
 
 // Set up an event listener on the range input to update the line width
@@ -21,6 +23,8 @@ lineWidthRange.addEventListener("input", event => {
     const width=event.target.value
   // Update the lineWidthLabel to display the selected width
   // Update the line width for the canvas drawing
+  lineWidthLabel.innerHTML = width;
+  context.lineWidth = width;
 });
 
 
@@ -56,8 +60,18 @@ const drawLine = event => {
     // 3. Draw the line to the new position
     // 4. Update the stroke
     // 5. Update the coordinates
+    context.beginPath();
+    context.moveTo(x,y);
+    context.lineTo(newX,newY);
+    context.stroke();
+    x = newX;
+    y = newY;
   }
 };
 
 // Set up the mouse event listeners
 //Hint: You need to call the correct functions (e.g., startDrawing, stopDrawing, drawLine) when the mouse events occur on the canvas.
+paintCanvas.addEventListener("mousedown", startDrawing);
+paintCanvas.addEventListener("mousemove", drawLine);
+paintCanvas.addEventListener("mouseup", stopDrawing);
+paintCanvas.addEventListener("mouseout", stopDrawing);
